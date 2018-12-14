@@ -325,11 +325,8 @@ open class YAxisRenderer: AxisRendererBase
                 startPoint = position.x
             }
             
-            context.move(to: CGPoint(x: startPoint, y: position.y))
-            context.addLine(to: CGPoint(x: viewPortHandler.contentRight, y: position.y))
-            
             context.beginPath()
-            context.move(to: CGPoint(x: viewPortHandler.contentLeft, y: position.y))
+            context.move(to: CGPoint(x: startPoint, y: position.y))
             context.addLine(to: CGPoint(x: viewPortHandler.contentRight, y: position.y))
             
             context.setStrokeColor(l.lineColor.cgColor)
