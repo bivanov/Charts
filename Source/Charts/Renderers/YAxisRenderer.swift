@@ -313,7 +313,7 @@ open class YAxisRenderer: AxisRendererBase
             clippingRect.size.height += l.lineWidth
             context.clip(to: clippingRect)
             
-            position.x = 0.0
+            position.x = CGFloat(l.startPoint ?? 0.0)
             position.y = CGFloat(l.limit)
             position = position.applying(trans)
             
