@@ -50,9 +50,28 @@ open class LegendEntry: NSObject
         self.formColor = formColor
     }
     
+    @objc public init(attributedLabel: NSAttributedString?,
+                      form: Legend.Form,
+                      formSize: CGFloat,
+                      formLineWidth: CGFloat,
+                      formLineDashPhase: CGFloat,
+                      formLineDashLengths: [CGFloat]?,
+                      formColor: NSUIColor?)
+    {
+        self.attributedLabel = attributedLabel
+        self.form = form
+        self.formSize = formSize
+        self.formLineWidth = formLineWidth
+        self.formLineDashPhase = formLineDashPhase
+        self.formLineDashLengths = formLineDashLengths
+        self.formColor = formColor
+    }
+    
     /// The legend entry text.
     /// A `nil` label will start a group.
     @objc open var label: String?
+    
+    @objc open var attributedLabel: NSAttributedString?
     
     /// The form to draw for this entry.
     ///

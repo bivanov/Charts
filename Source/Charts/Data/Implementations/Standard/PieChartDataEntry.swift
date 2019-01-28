@@ -57,6 +57,13 @@ open class PieChartDataEntry: ChartDataEntry
         self.label = label
     }
     
+    @objc public init(value: Double, attributedLabel: NSMutableAttributedString?)
+    {
+        super.init(x: 0.0, y: value, icon: nil, data: nil)
+        
+        self.attributedLabel = attributedLabel
+    }
+    
     /// - Parameters:
     ///   - value: The value on the y-axis
     @objc public convenience init(value: Double)
@@ -92,6 +99,8 @@ open class PieChartDataEntry: ChartDataEntry
     // MARK: Data property accessors
     
     @objc open var label: String?
+    
+    @objc open var attributedLabel: NSMutableAttributedString?
     
     @objc open var value: Double
     {

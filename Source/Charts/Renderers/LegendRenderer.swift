@@ -100,17 +100,34 @@ open class LegendRenderer: Renderer
                     
                     for j in 0..<min(clrs.count, entryCount)
                     {
-                        entries.append(
-                            LegendEntry(
-                                label: (pds.entryForIndex(j) as? PieChartDataEntry)?.label,
-                                form: dataSet.form,
-                                formSize: dataSet.formSize,
-                                formLineWidth: dataSet.formLineWidth,
-                                formLineDashPhase: dataSet.formLineDashPhase,
-                                formLineDashLengths: dataSet.formLineDashLengths,
-                                formColor: clrs[j]
+                        let dataEntry = pds.entryForIndex(j) as? PieChartDataEntry
+                        
+                        if let attributed = dataEntry?.attributedLabel {
+                            entries.append(
+                                LegendEntry(
+                                    attributedLabel: attributed,
+                                    form: dataSet.form,
+                                    formSize: dataSet.formSize,
+                                    formLineWidth: dataSet.formLineWidth,
+                                    formLineDashPhase: dataSet.formLineDashPhase,
+                                    formLineDashLengths: dataSet.formLineDashLengths,
+                                    formColor: clrs[j]
+                                )
                             )
-                        )
+                        } else {
+                            entries.append(
+                                LegendEntry(
+                                    label: (pds.entryForIndex(j) as? PieChartDataEntry)?.label,
+                                    form: dataSet.form,
+                                    formSize: dataSet.formSize,
+                                    formLineWidth: dataSet.formLineWidth,
+                                    formLineDashPhase: dataSet.formLineDashPhase,
+                                    formLineDashLengths: dataSet.formLineDashLengths,
+                                    formColor: clrs[j]
+                                )
+                            )
+                        }
+                        
                     }
                     
                     if dataSet.label != nil
@@ -488,6 +505,35 @@ open class LegendRenderer: Renderer
                     posY += labelLineHeight + yEntrySpace
                     stack = 0.0
                 }
+                else if e.attributedLabel != nil {
+                    if drawingForm && !wasStacked
+                    {
+                        posX += direction == .leftToRight ? formToTextSpace : -formToTextSpace
+                    }
+                    else if wasStacked
+                    {
+                        posX = originPosX
+                    }
+                    
+                    if direction == .rightToLeft
+                    {
+                        posX -= (e.label! as NSString).size(withAttributes: [.font: labelFont]).width
+                    }
+                    
+                    if !wasStacked
+                    {
+                        drawAttributedLabel(context: context, x: posX, y: posY, label: e.attributedLabel!)
+                    }
+                    else
+                    {
+                        posY += labelLineHeight + yEntrySpace
+                        drawAttributedLabel(context: context, x: posX, y: posY, label: e.attributedLabel!)
+                    }
+                    
+                    // make a step down
+                    posY += labelLineHeight + yEntrySpace
+                    stack = 0.0
+                }
                 else
                 {
                     stack += formSize + stackSpace
@@ -575,5 +621,10 @@ open class LegendRenderer: Renderer
     @objc open func drawLabel(context: CGContext, x: CGFloat, y: CGFloat, label: String, font: NSUIFont, textColor: NSUIColor)
     {
         ChartUtils.drawText(context: context, text: label, point: CGPoint(x: x, y: y), align: .left, attributes: [NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: textColor])
+    }
+    
+    @objc open func drawAttributedLabel(context: CGContext, x: CGFloat, y: CGFloat, label: NSAttributedString)
+    {
+        ChartUtils.drawText(context: context, text: label, point: CGPoint(x: x, y: y), align: .left)
     }
 }

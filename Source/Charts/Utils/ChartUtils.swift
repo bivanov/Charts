@@ -176,6 +176,17 @@ open class ChartUtils
         NSUIGraphicsPopContext()
     }
     
+    open class func drawText(context: CGContext, text: NSAttributedString, point: CGPoint, align: NSTextAlignment)
+    {
+        var point = point
+        
+        NSUIGraphicsPushContext(context)
+        
+        text.draw(at: point)
+        
+        NSUIGraphicsPopContext()
+    }
+    
     open class func drawText(context: CGContext, text: String, point: CGPoint, attributes: [NSAttributedString.Key : Any]?, anchor: CGPoint, angleRadians: CGFloat)
     {
         var drawOffset = CGPoint()
